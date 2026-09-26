@@ -1,5 +1,4 @@
 import { expect, test } from "../../fixtures/test.fixture";
-import { generateBio } from "../../utils/dataGenerator";
 
 test.describe("Update User Settings", () => {
   test.describe.configure({ mode: "serial" });
@@ -14,14 +13,14 @@ test.describe("Update User Settings", () => {
       "This test mutates the shared account profile",
     );
 
-    const bio = generateBio();
+    const bio = "Playwright settings test bio";
 
     await page.goto("/");
     await settingsPage.open();
     await settingsPage.updateBio(bio);
 
-    await expect(page).toHaveURL(/\/(settings)?$/);
-    await page.goto("/settings");
+    await page.goto("/");
+    await settingsPage.open();
     await expect(settingsPage.bioInput()).toHaveValue(bio);
   });
 

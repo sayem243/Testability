@@ -17,10 +17,8 @@ test("edits an existing article created through the API", async ({
     await articlePage.expectTitle(original.title);
     await articlePage.edit();
     await newArticlePage.fillArticle(updated);
-    await newArticlePage.publish();
-
-    currentSlug =
-      new URL(page.url()).pathname.split("/").at(-1) ?? created.slug;
+    currentSlug = await newArticlePage.publish();
+    await articlePage.open(currentSlug);
     await articlePage.expectTitle(updated.title);
     await page.reload();
     await articlePage.expectTitle(updated.title);

@@ -26,7 +26,7 @@ export class NewArticlePage {
       .fill(article.tag);
   }
 
-  async publish(): Promise<void> {
+  async publish(): Promise<string> {
     const saveResponse = this.page.waitForResponse((response) => {
       const method = response.request().method();
       return (
@@ -41,7 +41,15 @@ export class NewArticlePage {
       response.ok(),
       "Article save response should be successful",
     ).toBeTruthy();
+    const result = (await response.json()) as {
+      article?: { slug?: string };
+    };
     await this.page.waitForURL((url) => url.pathname.startsWith("/article/"));
+    return (
+      result.article?.slug ??
+      new URL(this.page.url()).pathname.split("/").at(-1) ??
+      ""
+    );
   }
 
   async submit(): Promise<void> {

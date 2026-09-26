@@ -27,6 +27,24 @@ export class NewArticlePage {
   }
 
   async publish(): Promise<void> {
+    const saveResponse = this.page.waitForResponse((response) => {
+      const method = response.request().method();
+      return (
+        response.url().includes("/api/articles/") &&
+        (method === "POST" || method === "PUT")
+      );
+    });
+
+    await this.submit();
+    const response = await saveResponse;
+    expect(
+      response.ok(),
+      "Article save response should be successful",
+    ).toBeTruthy();
+    await this.page.waitForURL((url) => url.pathname.startsWith("/article/"));
+  }
+
+  async submit(): Promise<void> {
     await this.page.getByRole("button", { name: "Publish Article" }).click();
   }
 }

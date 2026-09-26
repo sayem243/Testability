@@ -1,0 +1,13 @@
+playwright/.auth/
+playwright-report/
+test-results/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/.playwright-mcp
+/.github/agents/

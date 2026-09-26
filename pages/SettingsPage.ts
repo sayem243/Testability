@@ -14,7 +14,18 @@ export class SettingsPage {
     await this.page
       .getByRole("textbox", { name: "Short bio about you" })
       .fill(bio);
+
+    const updateResponse = this.page.waitForResponse((response) => {
+      const request = response.request();
+      return (
+        /\/user(?:\/|$)/.test(response.url()) &&
+        request.method() === "PUT" &&
+        response.ok()
+      );
+    });
+
     await this.page.getByRole("button", { name: "Update Settings" }).click();
+    await updateResponse;
   }
 
   bioInput() {

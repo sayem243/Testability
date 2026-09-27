@@ -1,6 +1,7 @@
 playwright/.auth/
 playwright-report/
 test-results/
+.env
 
 # Playwright
 node_modules/
@@ -11,3 +12,4 @@ node_modules/
 /playwright/.auth/
 .playwright-mcp/
 /.github/agents/
+.vscode/mcp.json

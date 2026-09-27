@@ -10,10 +10,11 @@ export class SettingsPage {
     ).toBeVisible();
   }
 
-  async updateBio(bio: string): Promise<void> {
+  async updateProfile(profile: { email: string; bio: string }): Promise<void> {
+    await this.page.getByRole("textbox", { name: "Email" }).fill(profile.email);
     await this.page
       .getByRole("textbox", { name: "Short bio about you" })
-      .fill(bio);
+      .fill(profile.bio);
 
     const updateResponse = this.page.waitForResponse((response) => {
       const request = response.request();
@@ -25,7 +26,16 @@ export class SettingsPage {
     });
 
     await this.page.getByRole("button", { name: "Update Settings" }).click();
-    await updateResponse;
+    const response = await updateResponse;
+    const result = (await response.json()) as {
+      user: { email: string; bio: string };
+    };
+    expect(result.user.email).toBe(profile.email);
+    expect(result.user.bio).toBe(profile.bio);
+  }
+
+  emailInput() {
+    return this.page.getByRole("textbox", { name: "Email" });
   }
 
   bioInput() {
